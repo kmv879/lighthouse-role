@@ -1,0 +1,22 @@
+---
+# tasks file for lighthouse-role
+- name: Install packages
+  ansible.builtin.yum:
+    name:
+      - epel-release
+      - git
+- name: Install nginx
+  become: true
+  ansible.builtin.yum:
+    name:
+      - nginx
+- name: clone lighthouse repo
+  ansible.builtin.git:
+    repo: https://github.com/VKCOM/lighthouse.git
+    dest: /usr/share/nginx/html/lighthouse
+    clone: true
+    update: true
+    version: master
+  notify: Start nginx service
+- name: Flush handlers
+  meta: flush_handlers
